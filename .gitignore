@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Testing
+coverage/
+
+# Production builds (kept for GitHub Pages)
+
+# Caches
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Package manager metadata (Yarn PnP)
+.pnp
+.pnp.js
+
+# Editors/IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.iml
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
