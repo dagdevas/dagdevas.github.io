@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Сайт завода металлоконструкций",
   "main": "index.js",
-  "homepage": "https://dagdevas.github.io",
+  "homepage": "https://dagdevas-dagdevas.github.io/",
   "scripts": {
   "predeploy": "npm run build",
   "deploy": "gh-pages -b main -d build",
