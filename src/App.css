@@ -76,12 +76,12 @@ main {
 
 /* Улучшенная типографика */
 h1, h2, h3, h4, h5, h6 {
-  /* color: #1f2937; */
+  color: #1f2937;
   line-height: 1.2;
 }
 
 p {
-  /* color: #6b7280; */
+  color: #6b7280;
   line-height: 1.6;
 }
 
@@ -196,10 +196,3 @@ img {
   }
 }
 
-
-
-
-
-.text-main p {
-  font-size: 16px
-}

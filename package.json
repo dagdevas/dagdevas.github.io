@@ -5,28 +5,21 @@
   "main": "index.js",
   "homepage": "https://dagdevas.github.io/",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -b main -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -b main -d build",
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^40.2.0",
-    "@ckeditor/ckeditor5-react": "^6.0.0",
-    "axios": "^1.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
-    "react-scripts": "5.0.1",
-    "start": "^5.1.0"
+    "react-scripts": "5.0.1"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0",
-    "prettier": "^3.0.0"
+    "gh-pages": "^6.3.0"
   },
   "browserslist": {
     "production": [
