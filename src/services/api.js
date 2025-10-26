@@ -34,7 +34,8 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Токен истек или недействителен
       localStorage.removeItem('adminToken');
-      window.location.href = '/admin/login';
+      // HashRouter редирект
+      window.location.hash = '#/admin/login';
     }
     return Promise.reject(error);
   }
@@ -76,53 +77,90 @@ export const authAPI = {
   }
 };
 
-// API для статей
-export const articlesAPI = {
-  // Получение всех статей (публичные)
-  getArticles: async (params = {}) => {
-    const response = await api.get('/articles', { params });
+// API для новостей
+export const newsAPI = {
+  getNews: async (params = {}) => {
+    const response = await api.get('/news', { params });
     return response.data;
   },
-
-  // Получение статьи по slug
-  getArticleBySlug: async (slug) => {
-    const response = await api.get(`/articles/${slug}`);
+  getBySlug: async (slug) => {
+    const response = await api.get(`/news/${slug}`);
     return response.data;
   },
-
-  // Получение всех статей (админ)
-  getAllArticles: async (params = {}) => {
-    const response = await api.get('/articles/admin/all', { params });
+  getAllAdmin: async (params = {}) => {
+    const response = await api.get('/news/admin/all/list', { params });
     return response.data;
   },
-
-  // Создание статьи
-  createArticle: async (data) => {
-    const response = await api.post('/articles', data);
+  create: async (data) => {
+    const response = await api.post('/news', data);
     return response.data;
   },
-
-  // Обновление статьи
-  updateArticle: async (id, data) => {
-    const response = await api.put(`/articles/${id}`, data);
+  update: async (id, data) => {
+    const response = await api.put(`/news/${id}`, data);
     return response.data;
   },
-
-  // Удаление статьи
-  deleteArticle: async (id) => {
-    const response = await api.delete(`/articles/${id}`);
+  remove: async (id) => {
+    const response = await api.delete(`/news/${id}`);
     return response.data;
   },
+  updateStatus: async (id, status) => {
+    const response = await api.patch(`/news/${id}/status`, { status });
+    return response.data;
+  }
+};
 
-  // Получение статьи по ID (админ)
-  getArticleById: async (id) => {
-    const response = await api.get(`/articles/admin/${id}`);
+// API для продукции
+export const productsAPI = {
+  getProducts: async (params = {}) => {
+    const response = await api.get('/products', { params });
     return response.data;
   },
+  getBySlug: async (slug) => {
+    const response = await api.get(`/products/${slug}`);
+    return response.data;
+  },
+  getAllAdmin: async (params = {}) => {
+    const response = await api.get('/products/admin/all/list', { params });
+    return response.data;
+  },
+  create: async (data) => {
+    const response = await api.post('/products', data);
+    return response.data;
+  },
+  update: async (id, data) => {
+    const response = await api.put(`/products/${id}`, data);
+    return response.data;
+  },
+  remove: async (id) => {
+    const response = await api.delete(`/products/${id}`);
+    return response.data;
+  }
+};
 
-  // Изменение статуса статьи
-  updateArticleStatus: async (id, status) => {
-    const response = await api.patch(`/articles/${id}/status`, { status });
+// API для сертификатов
+export const certificationsAPI = {
+  getCertifications: async (params = {}) => {
+    const response = await api.get('/certifications', { params });
+    return response.data;
+  },
+  getBySlug: async (slug) => {
+    const response = await api.get(`/certifications/${slug}`);
+    return response.data;
+  },
+  getAllAdmin: async (params = {}) => {
+    const response = await api.get('/certifications/admin/all/list', { params });
+    return response.data;
+  },
+  create: async (data) => {
+    const response = await api.post('/certifications', data);
+    return response.data;
+  },
+  update: async (id, data) => {
+    const response = await api.put(`/certifications/${id}`, data);
+    return response.data;
+  },
+  remove: async (id) => {
+    const response = await api.delete(`/certifications/${id}`);
     return response.data;
   }
 };
@@ -157,6 +195,16 @@ export const uploadAPI = {
     return response.data;
   },
 
+  // Загрузка документа
+  uploadDocument: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post('/upload/document', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+  },
+
   // Удаление файла
   deleteFile: async (filename) => {
     const response = await api.delete(`/upload/${filename}`);
@@ -167,26 +215,11 @@ export const uploadAPI = {
   getFiles: async () => {
     const response = await api.get('/upload/list');
     return response.data;
-  }
-};
-
-// API для администрирования
-export const adminAPI = {
-  // Получение статистики дашборда
-  getDashboard: async () => {
-    const response = await api.get('/admin/dashboard');
-    return response.data;
   },
 
-  // Получение настроек
-  getSettings: async () => {
-    const response = await api.get('/admin/settings');
-    return response.data;
-  },
-
-  // Обновление настроек
-  updateSettings: async (data) => {
-    const response = await api.put('/admin/settings', data);
+  // Получение списка документов
+  getDocs: async () => {
+    const response = await api.get('/upload/list-docs');
     return response.data;
   }
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { uploadSingle, uploadMultiple, deleteFile, getFileUrl } = require('../utils/upload');
+const { uploadSingle, uploadMultiple, uploadSingleDoc, deleteFile, getFileUrl } = require('../utils/upload');
 const { sendSuccess, sendError } = require('../utils/response');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
@@ -53,6 +53,30 @@ router.post('/multiple', authenticateToken, requireAdmin, (req, res) => {
   });
 });
 
+// Загрузка одного документа
+router.post('/document', authenticateToken, requireAdmin, (req, res) => {
+  uploadSingleDoc(req, res, (err) => {
+    if (err) {
+      console.error('Ошибка загрузки документа:', err);
+      return sendError(res, err.message, 400);
+    }
+
+    if (!req.file) {
+      return sendError(res, 'Файл не был загружен', 400);
+    }
+
+    const fileUrl = getFileUrl(req.file.filename);
+
+    sendSuccess(res, {
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      size: req.file.size,
+      url: fileUrl,
+      path: req.file.path
+    }, 'Документ загружен успешно');
+  });
+});
+
 // Удаление файла
 router.delete('/:filename', authenticateToken, requireAdmin, (req, res) => {
   try {
@@ -71,7 +95,7 @@ router.delete('/:filename', authenticateToken, requireAdmin, (req, res) => {
   }
 });
 
-// Получение списка загруженных файлов
+// Получение списка загруженных изображений
 router.get('/list', authenticateToken, requireAdmin, (req, res) => {
   try {
     const fs = require('fs');
@@ -95,6 +119,36 @@ router.get('/list', authenticateToken, requireAdmin, (req, res) => {
   } catch (error) {
     console.error('Ошибка получения списка файлов:', error);
     sendError(res, 'Ошибка получения списка файлов', 500);
+  }
+});
+
+// Получение списка загруженных документов
+router.get('/list-docs', authenticateToken, requireAdmin, (req, res) => {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const filesDir = path.join(__dirname, '../uploads/files');
+
+    if (!fs.existsSync(filesDir)) {
+      return sendSuccess(res, { files: [] }, 'Список документов получен успешно');
+    }
+
+    const files = fs.readdirSync(filesDir).map(filename => {
+      const filePath = path.join(filesDir, filename);
+      const stats = fs.statSync(filePath);
+      return {
+        filename,
+        url: getFileUrl(filename),
+        size: stats.size,
+        createdAt: stats.birthtime,
+        modifiedAt: stats.mtime
+      };
+    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    sendSuccess(res, { files }, 'Список документов получен успешно');
+  } catch (error) {
+    console.error('Ошибка получения списка документов:', error);
+    sendError(res, 'Ошибка получения списка документов', 500);
   }
 });
 

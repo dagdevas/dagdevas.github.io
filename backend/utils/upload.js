@@ -13,6 +13,11 @@ const imagesDir = path.join(uploadDir, 'images');
 if (!fs.existsSync(imagesDir)) {
   fs.mkdirSync(imagesDir, { recursive: true });
 }
+// Создание папки для документов
+const filesDir = path.join(uploadDir, 'files');
+if (!fs.existsSync(filesDir)) {
+  fs.mkdirSync(filesDir, { recursive: true });
+}
 
 // Настройка multer для загрузки изображений
 const storage = multer.diskStorage({
@@ -27,7 +32,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// Фильтр для проверки типа файла
+// Фильтр для проверки типа файла (изображения)
 const fileFilter = (req, file, cb) => {
   // Разрешенные типы изображений
   const allowedTypes = /jpeg|jpg|png|gif|webp/;
@@ -56,11 +61,45 @@ const uploadSingle = upload.single('image');
 // Middleware для загрузки нескольких изображений
 const uploadMultiple = upload.array('images', 10);
 
+// Настройка multer для документов (pdf/doc/docx/xls/xlsx)
+const storageDocs = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, filesDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const extension = path.extname(file.originalname);
+    cb(null, `file-${uniqueSuffix}${extension}`);
+  }
+});
+
+const docsFilter = (req, file, cb) => {
+  const allowed = /pdf|doc|docx|xls|xlsx/;
+  const extname = allowed.test(path.extname(file.originalname).toLowerCase());
+  const mimetypeOk = /application\//.test(file.mimetype) || /officedocument|pdf/.test(file.mimetype);
+  if (extname && mimetypeOk) return cb(null, true);
+  cb(new Error('Разрешены только документы (PDF, DOCX, XLSX)'));
+};
+
+const uploadDocs = multer({
+  storage: storageDocs,
+  limits: { fileSize: 20 * 1024 * 1024 },
+  fileFilter: docsFilter
+});
+
+// Middleware для загрузки одного документа
+const uploadSingleDoc = uploadDocs.single('file');
+
 // Функция для удаления файла
 const deleteFile = (filename) => {
-  const filePath = path.join(imagesDir, filename);
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
+  const imagePath = path.join(imagesDir, filename);
+  const docPath = path.join(filesDir, filename);
+  if (fs.existsSync(imagePath)) {
+    fs.unlinkSync(imagePath);
+    return true;
+  }
+  if (fs.existsSync(docPath)) {
+    fs.unlinkSync(docPath);
     return true;
   }
   return false;
@@ -68,7 +107,8 @@ const deleteFile = (filename) => {
 
 // Функция для получения URL файла
 const getFileUrl = (filename) => {
-  return `/uploads/images/${filename}`;
+  if (filename.startsWith('image-')) return `/uploads/images/${filename}`;
+  return `/uploads/files/${filename}`;
 };
 
 // Функция для очистки старых файлов (старше 30 дней)
@@ -90,6 +130,7 @@ const cleanupOldFiles = () => {
 module.exports = {
   uploadSingle,
   uploadMultiple,
+  uploadSingleDoc,
   deleteFile,
   getFileUrl,
   cleanupOldFiles

@@ -8,6 +8,14 @@ require('dotenv').config({ path: './config.env' });
 
 const app = express();
 
+// CORS - ДО ВСЕГО ОСТАЛЬНОГО
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Middleware безопасности
 app.use(helmet());
 
@@ -21,12 +29,6 @@ const limiter = rateLimit({
   message: 'Слишком много запросов с этого IP, попробуйте позже.'
 });
 app.use('/api/', limiter);
-
-// CORS
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
-}));
 
 // Парсинг JSON
 app.use(express.json({ limit: '10mb' }));
@@ -48,15 +50,17 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/metall-pl
 
 // Импорт маршрутов
 const authRoutes = require('./routes/auth');
-const articleRoutes = require('./routes/articles');
-const adminRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
+const newsRoutes = require('./routes/news');
+const productsRoutes = require('./routes/products');
+const certificationsRoutes = require('./routes/certifications');
 
 // Маршруты API
 app.use('/api/auth', authRoutes);
-app.use('/api/articles', articleRoutes);
-app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/news', newsRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/certifications', certificationsRoutes);
 
 // Базовый маршрут
 app.get('/', (req, res) => {

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-// НАМ СТОЛЬКО ПОЛЕЙ НАХУЙ НЕ НАДО
 const adminSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -42,7 +41,6 @@ const adminSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-// ЗАЧЕМИ ХЕШИРОВАНИЕ В МОДЕЛЕ
 // Хеширование пароля перед сохранением
 adminSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();

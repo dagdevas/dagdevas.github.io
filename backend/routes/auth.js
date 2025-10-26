@@ -1,5 +1,4 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const Admin = require('../models/Admin');
 const { generateToken } = require('../utils/jwt');
 const { sendSuccess, sendError, sendValidationError, sendUnauthorized } = require('../utils/response');
@@ -7,60 +6,7 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Регистрация администратора (только для первого админа)
-router.post('/register', async (req, res) => {
-  try {
-    const { email, password, name } = req.body;
-
-    // Проверка, есть ли уже администраторы
-    const existingAdmins = await Admin.countDocuments();
-    if (existingAdmins > 0) {
-      return sendError(res, 'Регистрация новых администраторов запрещена', 403);
-    }
-
-    // Валидация
-    if (!email || !password || !name) {
-      return sendValidationError(res, {
-        email: !email ? 'Email обязателен' : null,
-        password: !password ? 'Пароль обязателен' : null,
-        name: !name ? 'Имя обязательно' : null
-      });
-    }
-
-    if (password.length < 6) {
-      return sendValidationError(res, {
-        password: 'Пароль должен содержать минимум 6 символов'
-      });
-    }
-
-    // Проверка существования администратора
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return sendError(res, 'Администратор с таким email уже существует', 400);
-    }
-
-    // Создание администратора
-    const admin = new Admin({
-      email,
-      password,
-      name
-    });
-
-    await admin.save();
-
-    // Генерация токена
-    const token = generateToken({ id: admin._id, role: admin.role });
-
-    sendSuccess(res, {
-      admin: admin.toJSON(),
-      token
-    }, 'Администратор успешно зарегистрирован', 201);
-
-  } catch (error) {
-    console.error('Ошибка регистрации:', error);
-    sendError(res, 'Ошибка при регистрации администратора', 500, error);
-  }
-});
+// Регистрация отключена: админ создается скриптом initAdmin и доступен только логин
 
 // Вход администратора
 router.post('/login', async (req, res) => {

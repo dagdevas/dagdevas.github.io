@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { certificationsAPI } from '../services/api';
 import './About.css';
 
 const About = () => {
@@ -25,12 +26,21 @@ const About = () => {
     }
   ];
 
-  const certificates = [
-    'ISO 9001:2015 - Система менеджмента качества',
-    'ISO 14001:2015 - Система экологического менеджмента',
-    'OHSAS 18001:2007 - Система менеджмента охраны труда',
-    'Сертификат соответствия ГОСТ Р'
-  ];
+  const [certificates, setCertificates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await certificationsAPI.getCertifications({ page: 1, limit: 10 });
+        setCertificates(res.data.items || []);
+      } catch (e) {
+        setCertificates([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   return (
     <div className="about">
@@ -113,10 +123,13 @@ const About = () => {
         <div className="container">
           <h2 className="section-title">Сертификаты и лицензии</h2>
           <div className="certificates-list">
-            {certificates.map((certificate, index) => (
-              <div key={index} className="certificate-item">
+            {loading ? 'Загрузка...' : certificates.map((cert) => (
+              <div key={cert._id} className="certificate-item">
                 <div className="certificate-icon">📜</div>
-                <span>{certificate}</span>
+                <span>{cert.title}</span>
+                {cert.file?.url && (
+                  <a href={cert.file.url} target="_blank" rel="noreferrer" style={{ marginLeft: 8 }}>Скачать</a>
+                )}
               </div>
             ))}
           </div>

@@ -25,6 +25,7 @@ const Header = () => {
             <Link to="/services" className="nav-link">Сервис</Link>
             <Link to="/about" className="nav-link">О компании</Link>
             <Link to="/contacts" className="nav-link">Контакты</Link>
+            <Link to="/admin/news" className="nav-link">Админ</Link>
           </nav>
 
           <div className="header-contacts">

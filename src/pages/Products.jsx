@@ -1,45 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { productsAPI } from '../services/api';
 import './Products.css';
 
 const Products = () => {
-  const products = [
-    {
-      id: 1,
-      title: 'Металлоконструкции промышленных зданий и сооружений',
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-      description: 'Производство металлических каркасов для промышленных объектов, ангаров, складов и производственных зданий.'
-    },
-    {
-      id: 2,
-      title: 'Металлоконструкции гражданских зданий и сооружений',
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
-      description: 'Стальные конструкции для жилых и общественных зданий, торговых центров и офисных комплексов.'
-    },
-    {
-      id: 3,
-      title: 'Металлоконструкции хозяйственно-бытового назначения',
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-      description: 'Специализированные конструкции для бытовых и хозяйственных нужд, включая гаражи и подсобные помещения.'
-    },
-    {
-      id: 4,
-      title: 'Оборудование для железнодорожной и транспортной техники',
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
-      description: 'Комплектующие и оборудование для железнодорожного транспорта, вагонов и подвижного состава.'
-    },
-    {
-      id: 5,
-      title: 'Горно-шахтное оборудование',
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400',
-      description: 'Специализированное оборудование для горнодобывающей промышленности и шахтного строительства.'
-    },
-    {
-      id: 6,
-      title: 'Нестандартизированное оборудование',
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400',
-      description: 'Индивидуальные решения и нестандартное оборудование по техническим заданиям заказчика.'
-    }
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await productsAPI.getProducts({ page: 1, limit: 24 });
+        setProducts(res.data.items || []);
+      } catch (e) {
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   return (
     <div className="products">
@@ -53,10 +31,10 @@ const Products = () => {
       <section className="products-section">
         <div className="container">
           <div className="products-grid">
-            {products.map(product => (
-              <div key={product.id} className="product-card">
+            {loading ? 'Загрузка...' : products.map(product => (
+              <div key={product._id} className="product-card">
                 <div className="product-image">
-                  <img src={product.image} alt={product.title} />
+                  <img src={product.image?.url} alt={product.title} />
                 </div>
                 <div className="product-content">
                   <h3 className="product-title">{product.title}</h3>
