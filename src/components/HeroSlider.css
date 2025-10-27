@@ -1,6 +1,6 @@
 .hero-slider {
   position: relative;
-  height: 100vh;
+  height: 55vh;
   overflow: hidden;
   background: #1f2937;
 }
@@ -61,7 +61,7 @@
 }
 
 .slide-title {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
   line-height: 1.2;
@@ -99,12 +99,12 @@
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.slide-buttons .btn:hover {
+/* .slide-buttons .btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   border-color: rgba(255, 255, 255, 0.4);
   filter: brightness(1.1);
-}
+} */
 
 /* Навигационные стрелки */
 .slider-arrow {

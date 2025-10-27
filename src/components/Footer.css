@@ -52,7 +52,7 @@
 }
 
 .contact-info a {
-  color: #3b82f6;
+  color: white;
   text-decoration: none;
 }
 
@@ -63,7 +63,7 @@
 .social-links {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .social-link {
@@ -105,6 +105,7 @@
   align-items: center;
   padding: 0.5rem 0;
   border-bottom: 1px solid #374151;
+  flex-direction: column;
 }
 
 .hours-item:last-of-type {
@@ -119,7 +120,7 @@
 .time {
   color: #3b82f6;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.3rem;
 }
 
 .hours-break {

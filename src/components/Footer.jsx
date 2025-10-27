@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-section">
             <h3>Квадрат</h3>
-            <p>Специализируемся на изготовлении металлоконструкций для промышленных объектов, горнодобывающей отрасли и транспортной инфраструктуры с применением современных технологий производства.</p>
+            <p>Металлоконструкции под задачи промышленности, горной отрасли и транспортного строительства.</p>
           </div>
           
           <div className="footer-section">
@@ -35,15 +35,14 @@ const Footer = () => {
               <li><Link to="/about">О компании</Link></li>
               <li><Link to="/about">Производство</Link></li>
               <li><Link to="/about">Сертификаты</Link></li>
-              <li><Link to="/about">Вакансии</Link></li>
             </ul>
           </div>
           
           <div className="footer-section">
             <h4>Контакты</h4>
             <div className="contact-info">
-              <p>Телефон: <a href="tel:+79832179608">+7 (983) 217-96-08</a></p>
-              <p>Email: <a href="mailto:info@metallzavod.ru">info@metallzavod.ru</a></p>
+              <p>Телефон: <a href="tel:+79019299808">+7 (901) 929-98-08</a></p>
+              <p>Email: <a href="mailto:pkfkvadrat@yandex.ru">pkfkvadrat@yandex.ru</a></p>
               <div className="social-links">
                 <a href="https://wa.me/79832179608" className="social-link whatsapp" target="_blank" rel="noopener noreferrer">
                   WhatsApp
@@ -57,7 +56,7 @@ const Footer = () => {
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; 2024 МеталлЗавод. Все права защищены.</p>
+          <p>&copy; 2024 Квадрат. Все права защищены.</p>
         </div>
       </div>
     </footer>

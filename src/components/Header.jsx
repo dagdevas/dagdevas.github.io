@@ -22,14 +22,13 @@ const Header = () => {
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
             <Link to="/" className="nav-link">Главная</Link>
             <Link to="/products" className="nav-link">Продукция</Link>
-            <Link to="/services" className="nav-link">Сервис</Link>
             <Link to="/about" className="nav-link">О компании</Link>
             <Link to="/contacts" className="nav-link">Контакты</Link>
             <Link to="/admin/news" className="nav-link">Админ</Link>
           </nav>
 
           <div className="header-contacts">
-            <a href="tel:+79832179608" className="phone">+7 (983) 217-96-08</a>
+            <a href="tel:+79019299808" className="phone">+7 (901) 929-98-08</a>
             <div className="social-links">
               <a href="https://wa.me/79832179608" className="social-link whatsapp" target="_blank" rel="noopener noreferrer">
                 WhatsApp
